@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+   
+  
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+  </style>
+</head>
+<body  style="background-color: #022c50e7;color: aliceblue;text-shadow: 2px 2px #000000d4;">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+  crossorigin="anonymous">
+  <div style="margin-bottom: 30px;">
+    <img src="https://imesc.ma.gov.br/src/img/govMA.png" id="logo" width="250" height="100" style="position:relative;top:30px">
+    <img src="https://imesc.ma.gov.br/src/img/logo1-novo.png" id="logo2" width="120" height="80" style="position:relative;top:30px;left:15px">
+  </div>
+
+<h1 class="text-center" style="margin-bottom:20px;">COTAÇÕES DAS PRINCIPAIS MOEDAS EM TEMPO REAL</h1>
+  <table id="currencyTable">
+    <tr>
+      <th>Código</th>
+      <th>Código Inter</th>
+      <th>Nome</th>
+      <th>Maior</th>
+      <th>Menor</th>
+      <th>Variação</th>
+      <th>Variação Percentual</th>
+      <th>Compra</th>
+      <th>Venda</th>
+      <th>Última atualização</th>
+      
+    </tr>
+    
+  </table>
+  <div style="box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;width:600px;height:100px;margin-top: 40px;margin-left:30%;">
+  <h3>Conversor de moeda:(Em construção)</h3>
+  <label for="valor"style="font-size: smaller;">Valor em R$ a ser convertido:</label>
+  <input type="text" id="valor" oninput="formatCurrency(this)" placeholder="R$ 0.00">
+  <select name="select" >
+    <option value="dolar">Dólar</option>
+    <option value="euro" selected>Euro</option>
+    <option value="rublo">Rublo</option>
+    <option value="bitcoin">Bitcoin</option>
+  </select>
+  <button>Converter</button>
+  </div>
+  <script>
+        function formatCurrency(input) {
+        // Obtém o valor atual do input
+        let value = input.value;
+        // Remove tudo que não for um número
+        value = value.replace(/\D/g, '');
+        // Divide o valor por 100 para obter o valor em reais
+        value = Number(value) / 100;
+        // Formata o valor para o formato de moeda brasileira
+        value = value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        // Atualiza o valor do input com o valor formatado
+        input.value = value;
+    };
+    fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL,RUB-BRL')
+  .then(response => response.json())
+  .then(data => {
+    // Manipule os dados JSON aqui
+    var json = data;
+ var table = document.getElementById("currencyTable");
+
+    for (var key in json) {
+      if (json.hasOwnProperty(key)) {
+        var row = table.insertRow();
+
+        var codeCell = row.insertCell(0);
+        codeCell.innerHTML = json[key].code;
+
+        var codeinCell = row.insertCell(1);
+        codeinCell.innerHTML = json[key].codein;
+
+        var nameCell = row.insertCell(2);
+        nameCell.innerHTML = json[key].name;
+
+        var highCell = row.insertCell(3);
+        highCell.innerHTML = json[key].high;
+
+        var lowCell = row.insertCell(4);
+        lowCell.innerHTML = json[key].low;
+
+        var varBidCell = row.insertCell(5);
+        varBidCell.innerHTML = json[key].varBid;
+
+        var pctChangeCell = row.insertCell(6);
+        pctChangeCell.innerHTML = json[key].pctChange;
+
+        var bidCell = row.insertCell(7);
+        bidCell.innerHTML = json[key].bid;
+
+        var askCell = row.insertCell(8);
+        askCell.innerHTML = json[key].ask;
+
+        var createDateCell= row.insertCell(9);
+        createDateCell.innerHTML = json[key].create_date;
+
+        
+        
+  }
+}})
+  </script>
+</body>
+</html>
